@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login - BookYard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/additional-methods.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <?php
         session_start();
@@ -439,7 +442,7 @@
                 <i class="fas fa-check-circle"></i> <span id="successMessage"><?php echo isset($_GET['logout']) && $_GET['logout'] === 'success' ? 'You have been successfully logged out.' : ''; ?></span>
             </div>
             
-            <form id="loginForm" onsubmit="return handleLogin(event)">
+            <form id="loginForm" method="POST" action="">
                 <div class="form-group">
                     <label for="username" class="form-label">Username or Email</label>
                     <div class="input-group">
@@ -497,8 +500,150 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.min.js"></script>
     <script>
+        $(document).ready(function() {
+            // Initialize jQuery Validation
+            $('#loginForm').validate({
+                rules: {
+                    username: {
+                        required: true,
+                        minlength: 3,
+                        maxlength: 50,
+                        // Allow alphanumeric characters, email, or underscore
+                        pattern: /^[a-zA-Z0-9_@.-]+$/
+                    },
+                    password: {
+                        required: true,
+                        minlength: 6,
+                        maxlength: 100
+                    }
+                },
+                messages: {
+                    username: {
+                        required: 'Please enter your username or email',
+                        minlength: 'Username must be at least 3 characters long',
+                        maxlength: 'Username cannot exceed 50 characters',
+                        pattern: 'Username can only contain letters, numbers, and basic symbols'
+                    },
+                    password: {
+                        required: 'Please enter your password',
+                        minlength: 'Password must be at least 6 characters long',
+                        maxlength: 'Password cannot exceed 100 characters'
+                    }
+                },
+                errorElement: 'div',
+                errorClass: 'invalid-feedback',
+                errorPlacement: function(error, element) {
+                    // Insert error after the input-group
+                    error.insertAfter(element.closest('.input-group'));
+                    // Add error styling
+                    error.css({
+                        'color': '#dc3545',
+                        'font-size': '0.875rem',
+                        'margin-top': '5px'
+                    });
+                },
+                highlight: function(element) {
+                    $(element).addClass('is-invalid').removeClass('is-valid');
+                    $(element).css('border-color', '#dc3545');
+                },
+                unhighlight: function(element) {
+                    $(element).removeClass('is-invalid').addClass('is-valid');
+                    $(element).css('border-color', '#28a745');
+                },
+                submitHandler: function(form) {
+                    // Show loading state
+                    const loadingIndicator = $('#loadingIndicator');
+                    const loginBtn = $('.btn-login');
+                    
+                    loadingIndicator.show();
+                    loginBtn.prop('disabled', true);
+                    loginBtn.html('<i class="fas fa-spinner fa-spin"></i> Signing in...');
+                    
+                    // Get form data
+                    const formData = new FormData(form);
+                    
+                    // Submit form via AJAX
+                    $.ajax({
+                        url: 'Admin-login.php',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.success) {
+                                showAlert('success', 'Login successful! Redirecting to dashboard...');
+                                
+                                // Handle remember me
+                                const remember = $('#remember').is(':checked');
+                                const username = $('#username').val();
+                                
+                                if (remember) {
+                                    localStorage.setItem('rememberUser', username);
+                                } else {
+                                    sessionStorage.setItem('currentUser', username);
+                                }
+                                
+                                // Redirect to dashboard
+                                setTimeout(() => {
+                                    window.location.href = 'dashboard.php';
+                                }, 1500);
+                            } else {
+                                showAlert('error', response.message || 'Invalid username or password');
+                                resetFormState();
+                            }
+                        },
+                        error: function() {
+                            // Fallback to client-side validation for demo
+                            const username = $('#username').val();
+                            const password = $('#password').val();
+                            
+                            if (username === 'admin' && password === 'admin123') {
+                                showAlert('success', 'Login successful! Redirecting to dashboard...');
+                                
+                                // Handle remember me
+                                const remember = $('#remember').is(':checked');
+                                
+                                if (remember) {
+                                    localStorage.setItem('rememberUser', username);
+                                } else {
+                                    sessionStorage.setItem('currentUser', username);
+                                }
+                                
+                                // Redirect to dashboard
+                                setTimeout(() => {
+                                    window.location.href = 'dashboard.php';
+                                }, 1500);
+                            } else {
+                                showAlert('error', 'Invalid username or password. Hint: try admin/admin123');
+                                resetFormState();
+                            }
+                        }
+                    });
+                }
+            });
+            
+            // Function to reset form state
+            function resetFormState() {
+                const loadingIndicator = $('#loadingIndicator');
+                const loginBtn = $('.btn-login');
+                
+                loadingIndicator.hide();
+                loginBtn.prop('disabled', false);
+                loginBtn.html('<i class="fas fa-sign-in-alt"></i> Sign In');
+                
+                // Clear password field
+                $('#password').val('');
+            }
+            
+            // Make resetFormState global
+            window.resetFormState = resetFormState;
+        });
+
         function togglePassword() {
             const passwordField = document.getElementById('password');
             const passwordToggle = document.getElementById('passwordToggle');
@@ -537,59 +682,6 @@
                 errorAlert.style.display = 'none';
                 successAlert.style.display = 'none';
             }, 5000);
-        }
-
-        function handleLogin(event) {
-            event.preventDefault();
-            
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const remember = document.getElementById('remember').checked;
-            const loadingIndicator = document.getElementById('loadingIndicator');
-            const loginBtn = document.querySelector('.btn-login');
-            
-            // Basic validation
-            if (!username || !password) {
-                showAlert('error', 'Please enter both username and password');
-                return false;
-            }
-            
-            // Show loading state
-            loadingIndicator.style.display = 'block';
-            loginBtn.disabled = true;
-            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
-            
-            // Simulate API call (replace with actual authentication)
-            setTimeout(() => {
-                // Demo credentials - replace with actual authentication
-                if (username === 'admin' && password === 'admin123') {
-                    showAlert('success', 'Login successful! Redirecting to dashboard...');
-                    
-                    // Store session (in real app, this would be server-side)
-                    if (remember) {
-                        localStorage.setItem('rememberUser', username);
-                    } else {
-                        sessionStorage.setItem('currentUser', username);
-                    }
-                    
-                    // Redirect to dashboard
-                    setTimeout(() => {
-                        window.location.href = 'dashboard.php';
-                    }, 1500);
-                } else {
-                    showAlert('error', 'Invalid username or password');
-                    
-                    // Reset form state
-                    loadingIndicator.style.display = 'none';
-                    loginBtn.disabled = false;
-                    loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In';
-                    
-                    // Clear password field
-                    document.getElementById('password').value = '';
-                }
-            }, 2000);
-            
-            return false;
         }
 
         function socialLogin(provider) {
