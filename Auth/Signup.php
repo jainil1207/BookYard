@@ -93,7 +93,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['fullname']) && isset(
     </style>
 </head>
 <body>
-    <?php include '../Includes/navbar.php'; ?>
+    <?php include '../Includes/navbar.php'; ?> 
+     
     
     <div class="container">
         <div class="signup-container">

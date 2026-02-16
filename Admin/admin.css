@@ -377,12 +377,12 @@ body {
 
 .activity-title {
     font-weight: 600;
-    color: #ffffff;
+    color: black;
     margin-bottom: 5px;
 }
 
 .activity-description {
-    color: #cccccc;
+    color: black;
     font-size: 0.9rem;
     margin-bottom: 5px;
 }
@@ -499,12 +499,12 @@ body {
 
 .profile-info h3 {
     margin-bottom: 10px;
-    color: #ffffff;
+    color: black;
 }
 
 .profile-info p {
     margin-bottom: 5px;
-    color: #cccccc;
+    color: black;
 }
 
 .profile-stats {
