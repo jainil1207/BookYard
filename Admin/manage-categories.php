@@ -11,7 +11,7 @@
             --sidebar-width: 250px;
             --primary-color: #000000;
             --secondary-color: #333333;
-            --accent-color: #ffffff;
+            --accent-color: black;
             --text-light: #ffffff;
             --bg-light: #000000;
         }

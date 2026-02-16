@@ -108,7 +108,7 @@
             <div class="col-lg-8 mb-4">
                 <div class="contact-form">
                     <h3 class="mb-4">Send us a Message</h3>
-                    <form>
+                    <form> 
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="name" class="form-label">Your Name</label>
