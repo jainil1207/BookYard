@@ -50,49 +50,4 @@
   </div>
 </div>
 
-<script>
-document.getElementById('signupForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    
-    // Get form values
-    const name = document.getElementById('fullname').value;
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
-    const terms = document.getElementById('terms').checked;
-    
-    // Simple validation
-    if (!name || !email || !password || !confirmPassword) {
-        alert('Please fill in all fields');
-        return;
-    }
-    
-    if (password !== confirmPassword) {
-        alert('Passwords do not match');
-        return;
-    }
-    
-    if (!terms) {
-        alert('Please agree to the Terms and Conditions');
-        return;
-    }
-    
-    // Show success message
-    alert('Account created successfully! Redirecting to your dashboard...');
-    
-    // Close the signup modal
-    $('#signupModal').modal('hide');
-    
-    // Redirect to User Dashboard after a short delay
-    setTimeout(() => {
-        window.location.href = 'User/dashboard.php';
-    }, 1000);
-});
 
-function showLoginModal() {
-    $('#signupModal').modal('hide');
-    setTimeout(() => {
-        $('#loginModal').modal('show');
-    }, 300);
-}
-</script>

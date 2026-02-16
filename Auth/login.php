@@ -1,58 +1,60 @@
 <?php
 // Check if session is already started
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+  session_start();
 }
 // Handle login form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email']) && isset($_POST['password'])) {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    
-    // Demo user credentials (in real app, verify against database)
-    if ($email === 'user@bookyard.com' && $password === 'user123') {
-        $_SESSION['user_logged_in'] = true;
-        $_SESSION['user_name'] = 'John Doe';
-        $_SESSION['user_email'] = 'user@bookyard.com';
-        $_SESSION['user_phone'] = '+91 9876543210';
-        $_SESSION['user_address'] = '123 Main St, City, State';
-        $_SESSION['user_join_date'] = '2024-01-01';
-        $_SESSION['user_id'] = 'USR001';
-        
-        // Return success response
-        echo json_encode(['success' => true, 'message' => 'Login successful!']);
-        exit;
-    } else {
-        // Return error response
-        echo json_encode(['success' => false, 'message' => 'Invalid email or password']);
-        exit;
-    }
+  $email = $_POST['email'];
+  $password = $_POST['password'];
+
+  // Demo user credentials (in real app, verify against database)
+  if ($email === 'user@bookyard.com' && $password === 'user123') {
+    $_SESSION['user_logged_in'] = true;
+    $_SESSION['user_name'] = 'John Doe';
+    $_SESSION['user_email'] = 'user@bookyard.com';
+    $_SESSION['user_phone'] = '+91 9876543210';
+    $_SESSION['user_address'] = '123 Main St, City, State';
+    $_SESSION['user_join_date'] = '2024-01-01';
+    $_SESSION['user_id'] = 'USR001';
+
+    // Return success response
+    echo json_encode(['success' => true, 'message' => 'Login successful!']);
+    exit;
+  }
+  else {
+    // Return error response
+    echo json_encode(['success' => false, 'message' => 'Invalid email or password']);
+    exit;
+  }
 }
 
 // Handle signup form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['fullname']) && isset($_POST['signupEmail'])) {
-    $name = $_POST['fullname'];
-    $email = $_POST['signupEmail'];
-    $password = $_POST['signupPassword'];
-    
-    // Simple validation
-    if ($name && $email && $password) {
-        // Set session for new user
-        $_SESSION['user_logged_in'] = true;
-        $_SESSION['user_name'] = $name;
-        $_SESSION['user_email'] = $email;
-        $_SESSION['user_phone'] = '+91 9876543210';
-        $_SESSION['user_address'] = '123 Main St, City, State';
-        $_SESSION['user_join_date'] = date('Y-m-d');
-        $_SESSION['user_id'] = 'USR' . rand(1000, 9999);
-        
-        // Return success response
-        echo json_encode(['success' => true, 'message' => 'Account created successfully!']);
-        exit;
-    } else {
-        // Return error response
-        echo json_encode(['success' => false, 'message' => 'Please fill in all fields']);
-        exit;
-    }
+  $name = $_POST['fullname'];
+  $email = $_POST['signupEmail'];
+  $password = $_POST['signupPassword'];
+
+  // Simple validation
+  if ($name && $email && $password) {
+    // Set session for new user
+    $_SESSION['user_logged_in'] = true;
+    $_SESSION['user_name'] = $name;
+    $_SESSION['user_email'] = $email;
+    $_SESSION['user_phone'] = '+91 9876543210';
+    $_SESSION['user_address'] = '123 Main St, City, State';
+    $_SESSION['user_join_date'] = date('Y-m-d');
+    $_SESSION['user_id'] = 'USR' . rand(1000, 9999);
+
+    // Return success response
+    echo json_encode(['success' => true, 'message' => 'Account created successfully!']);
+    exit;
+  }
+  else {
+    // Return error response
+    echo json_encode(['success' => false, 'message' => 'Please fill in all fields']);
+    exit;
+  }
 }
 ?>
 
@@ -62,9 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['fullname']) && isset(
     <div class="modal-content" style="background-color: #000000; border: 1px solid #ffffff;">
       <div class="modal-header border-0">
         <h5 class="modal-title" id="loginModalLabel" style="color: #ffffff;">Welcome Back</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #ffffff;">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <p class="text-muted text-center mb-4">Login to your BookYard account</p>
@@ -72,13 +72,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['fullname']) && isset(
         <form id="loginForm">
           <div class="form-group mb-3">
             <label for="email" style="color: #ffffff;">Email address</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required style="background-color: #000000; color: #ffffff; border-color: #ffffff;">
+            <input type="text" class="form-control" id="email" name="email" placeholder="Enter your email" required style="background-color: #000000; color: #ffffff; border-color: #ffffff;">
             <div class="invalid-feedback"></div>
           </div>
           
           <div class="form-group mb-3">
             <label for="password" style="color: #ffffff;">Password</label>
-            <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required style="background-color: #000000; color: #ffffff; border-color: #ffffff;">
+            <input type="text" class="form-control" id="password" name="password" placeholder="Enter your password" required style="background-color: #000000; color: #ffffff; border-color: #ffffff;">
             <div class="invalid-feedback"></div>
           </div>
           
@@ -125,19 +125,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['fullname']) && isset(
           
           <div class="form-group mb-3">
             <label for="signupEmail" style="color: #ffffff;">Email address</label>
-            <input type="email" class="form-control" id="signupEmail" name="signupEmail" placeholder="Enter your email" required style="background-color: #000000; color: #ffffff; border-color: #ffffff;">
+            <input type="text" class="form-control" id="signupEmail" name="signupEmail" placeholder="Enter your email" required style="background-color: #000000; color: #ffffff; border-color: #ffffff;">
             <div class="invalid-feedback"></div>
           </div>
           
           <div class="form-group mb-3">
             <label for="signupPassword" style="color: #ffffff;">Password</label>
-            <input type="password" class="form-control" id="signupPassword" name="signupPassword" placeholder="Create a password" required style="background-color: #000000; color: #ffffff; border-color: #ffffff;">
+            <input type="text" class="form-control" id="signupPassword" name="signupPassword" placeholder="Create a password" required style="background-color: #000000; color: #ffffff; border-color: #ffffff;">
             <div class="invalid-feedback"></div>
           </div>
           
           <div class="form-group mb-3">
             <label for="confirmPassword" style="color: #ffffff;">Confirm Password</label>
-            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required style="background-color: #000000; color: #ffffff; border-color: #ffffff;">
+            <input type="text" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required style="background-color: #000000; color: #ffffff; border-color: #ffffff;">
             <div class="invalid-feedback"></div>
           </div>
           
@@ -182,14 +182,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['fullname']) && isset(
 .modal-header {
   border-bottom: 1px solid #ffffff !important;
 }
-.close {
-  color: #ffffff !important;
-}
 </style>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
 $(document).ready(function() {
@@ -365,3 +359,5 @@ function showLoginModal() {
     }, 300);
 }
 </script>
+
+<?php include 'signup-modal.php'; ?>

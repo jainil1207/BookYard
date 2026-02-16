@@ -1,7 +1,7 @@
 <?php
 // Check if session is already started
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+  session_start();
 }
 $isLoggedIn = isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true;
 
@@ -10,6 +10,9 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 $currentPage = str_replace('Auth/', '', $currentPage); // Remove Auth/ prefix if present
 $currentPage = str_replace('User/', '', $currentPage); // Remove User/ prefix if present
 ?>
+
+<!-- Include required CSS and JS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <!-- Simple navbar -->
 
@@ -34,11 +37,11 @@ $currentPage = str_replace('User/', '', $currentPage); // Remove User/ prefix if
           <a class="nav-link <?php echo $currentPage == 'Contact.php' ? 'active' : ''; ?>" href="/cie1/BookYard/Contact.php" style="color: #ffffff;">Contact</a>
         </li>
       </ul>
-      <ul class="navbar-nav ml-auto">
+      <ul class="navbar-nav ms-auto">
         <?php if ($isLoggedIn): ?>
           <!-- User Menu when logged in -->
-          <li class="nav-item dropdown mr-3">
-            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #ffffff;">
+          <li class="nav-item dropdown me-3">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #ffffff;">
               <i class="fas fa-user-circle"></i> <?php echo isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_name']) : 'User'; ?>
             </a>
             <div class="dropdown-menu dropdown-menu-right" style="background-color: #000000; border: 1px solid #ffffff;">
@@ -57,20 +60,25 @@ $currentPage = str_replace('User/', '', $currentPage); // Remove User/ prefix if
               </a>
             </div>
           </li>
-        <?php else: ?>
+        <?php
+else: ?>
           <!-- Login/Signup when not logged in -->
-          <li class="nav-item mr-3">
-            <form class="form-inline">
-              <input class="form-control" type="search" placeholder="Search books..." aria-label="Search" style="width: 200px; border-radius: 20px; border: 1px solid #ffffff; background-color: #000000; color: #ffffff;">
+          <li class="nav-item me-3">
+            <form class="d-flex" method="GET" action="Shop.php">
+              <input class="form-control me-2" type="search" name="search" placeholder="Search books..." aria-label="Search" style="border-radius: 20px; border: 1px solid #ffffff; background-color: #000000; color: #ffffff;">
+              <button class="btn btn-outline-light" type="submit" style="border-color: #ffffff; color: #ffffff;">
+                <i class="fas fa-search"></i>
+              </button>
             </form>
           </li>
           <li class="nav-item">
-            <a class="btn btn-outline-light rounded-pill" href="#" data-toggle="modal" data-target="#loginModal" style="border-color: #ffffff; color: #ffffff; background-color: transparent;">Login</a>
+            <a class="btn btn-outline-light rounded-pill" href="#" data-bs-toggle="modal" data-bs-target="#signupModal" style="border-color: #ffffff; color: #ffffff; background-color: transparent;">Login</a>
           </li>
           <li class="nav-item ml-3">
             <a class="btn btn-light rounded-pill" href="/cie1/BookYard/Auth/Signup.php" style="background-color: #ffffff; border-color: #ffffff; color: #000000;">Sign up</a>
           </li>
-        <?php endif; ?>
+        <?php
+endif; ?>
       </ul>
     </div>
   </div>
