@@ -58,6 +58,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['fullname']) && isset(
 }
 ?>
 
+
+<?php
+$is_standalone = basename($_SERVER['PHP_SELF']) === 'login.php';
+?>
+
+<?php if ($is_standalone): ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - BookYard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container text-center">
+        <h1 class="mb-4">BookYard Authentication</h1>
+        <button type="button" class="btn btn-light btn-lg me-3" data-bs-toggle="modal" data-bs-target="#loginModal">
+            Open Login Modal
+        </button>
+        <button type="button" class="btn btn-outline-light btn-lg" data-bs-toggle="modal" data-bs-target="#signupModal">
+            Open Signup Modal
+        </button>
+    </div>
+<?php
+endif; ?>
+
 <!-- Login Modal -->
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
@@ -109,9 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['fullname']) && isset(
     <div class="modal-content" style="background-color: #000000; border: 1px solid #ffffff;">
       <div class="modal-header border-0">
         <h5 class="modal-title" id="signupModalLabel" style="color: #ffffff;">Create Account</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #ffffff;">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <p class="text-muted text-center mb-4">Create your BookYard account</p>
@@ -184,9 +223,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['fullname']) && isset(
 }
 </style>
 
+<?php if ($is_standalone): ?>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- jQuery Validation -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/additional-methods.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<?php
+endif; ?>
+
 
 <script>
 $(document).ready(function() {
+    // Determine the fetch URL based on context
+    // If standalone, post to same file. If included (e.g. from index.php), post to Auth/login.php
+    /*
+    const isStandalone = <?php echo $is_standalone ? 'true' : 'false'; ?>;
+    const actionUrl = isStandalone ? 'login.php' : 'Auth/login.php';
+    */
+    // Correction: In most cases, relative path 'Auth/login.php' works from root (index.php).
+    // If we are in 'Auth/login.php', then 'Auth/login.php' relative path is wrong, it should be just 'login.php' or empty.
+    // Ideally we want to post to 'Auth/login.php' from root, or 'login.php' from Auth dir.
+    // Let's use a simpler approach: detecting current path in JS or PHP.
+    
+    // PHP Context is reliable:
+    const actionUrl = "<?php echo $is_standalone ? '' : 'Auth/login.php'; ?>"; 
+
     // Login form validation
     $('#loginForm').validate({
         rules: {
@@ -222,7 +286,7 @@ $(document).ready(function() {
             const formData = new FormData(form);
             
             // Send AJAX request
-            fetch('Auth/login.php', {
+            fetch(actionUrl, {
                 method: 'POST',
                 body: formData
             })
@@ -237,7 +301,7 @@ $(document).ready(function() {
                     
                     // Redirect to user dashboard
                     setTimeout(() => {
-                        window.location.href = 'User/dashboard.php';
+                        window.location.href = '<?php echo $is_standalone ? '../User/dashboard.php' : 'User/dashboard.php'; ?>';
                     }, 500);
                 } else {
                     alert(data.message + ' Hint: try user@bookyard.com / user123');
@@ -316,7 +380,7 @@ $(document).ready(function() {
             formData.append('signupPassword', $('#signupPassword').val());
             
             // Send AJAX request
-            fetch('Auth/login.php', {
+            fetch(actionUrl, {
                 method: 'POST',
                 body: formData
             })
@@ -331,7 +395,7 @@ $(document).ready(function() {
                     
                     // Redirect to user dashboard
                     setTimeout(() => {
-                        window.location.href = 'User/dashboard.php';
+                        window.location.href = '<?php echo $is_standalone ? '../User/dashboard.php' : 'User/dashboard.php'; ?>';
                     }, 500);
                 } else {
                     alert(data.message);
@@ -360,4 +424,8 @@ function showLoginModal() {
 }
 </script>
 
-<?php include 'signup-modal.php'; ?>
+<?php if ($is_standalone): ?>
+</body>
+</html>
+<?php
+endif; ?>

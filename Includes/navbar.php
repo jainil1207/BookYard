@@ -66,11 +66,12 @@ else: ?>
               </button>
             </form>
           </li>
+
           <li class="nav-item">
-            <a class="btn btn-outline-light rounded-pill" href="#" data-bs-toggle="modal" data-bs-target="#signupModal" style="border-color: #ffffff; color: #ffffff; background-color: transparent;">Login</a>
+            <a class="btn btn-outline-light rounded-pill" href="#" data-bs-toggle="modal" data-bs-target="#loginModal" style="border-color: #ffffff; color: #ffffff; background-color: transparent;">Login</a>
           </li>
           <li class="nav-item ms-3">
-            <a class="btn btn-light rounded-pill" href="Auth/Signup.php" style="background-color: #ffffff; border-color: #ffffff; color: #000000;">Sign up</a>
+            <a class="btn btn-light rounded-pill" href="#" data-bs-toggle="modal" data-bs-target="#signupModal" style="background-color: #ffffff; border-color: #ffffff; color: #000000;">Sign up</a>
           </li>
         <?php
 endif; ?>
