@@ -91,29 +91,30 @@
             margin-left: var(--sidebar-width);
             padding: 20px;
             min-height: 100vh;
-            background-color: var(--bg-light);
+            background-color: white;
             color: #ffffff;
         }
 
         .top-bar {
-            background: #000000;
-            border: 1px solid #ffffff;
+            background: #ffffffff;
+            border: 1px solid black;
             padding: 15px 20px;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
             margin-bottom: 30px;
             display: flex;
            justify-content: space-between;
-            color: #ffffff;
+            color: black
         }
 
         .content-card {
-            background: #000000;
+            background:white;
             padding: 25px;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border: 2px solid black;
         }
-
+      
         .form-section {
             margin-bottom: 30px;
         }
@@ -132,7 +133,7 @@
         }
 
         .form-control, .form-select {
-            border: 1px solid #ddd;
+            border: 1px solid black;
             border-radius: 8px;
             padding: 10px 15px;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
@@ -378,12 +379,12 @@
                             <div id="bookResults" style="max-height: 300px; overflow-y: auto;">
                                 <!-- Book results will be populated here -->
                             </div>
-                            <div class="mt-3">
+                            <!-- <div class="mt-3">
                                 <label for="selectedBook" class="form-label">Selected Book</label>
                                 <div class="alert alert-success" id="selectedBookInfo" style="display: none;">
                                     <i class="fas fa-book"></i> <span id="selectedBookTitle"></span>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
